@@ -641,6 +641,62 @@
             transform: translateY(0);
         }
 
+        /* Notification Action Buttons */
+        .notif-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .notif-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .notif-btn-coming {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .notif-btn-coming:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .notif-btn-coming:active {
+            transform: translateY(0);
+        }
+
+        .notif-btn-coming.sent {
+            background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .notif-btn-dismiss {
+            background: #F3F4F6;
+            color: #6B7280;
+            border: 1px solid #E5E7EB;
+        }
+
+        .notif-btn-dismiss:hover {
+            background: #E5E7EB;
+            border-color: #D1D5DB;
+        }
+
         /* Notification Panel */
         .notification-panel {
             position: absolute;
@@ -3932,21 +3988,34 @@
             message.textContent = alert.message || `Patient needs ${alert.type} assistance`;
             time.textContent = 'Just now';
 
-            // Clear any existing dismiss button
-            const existingBtn = popup.querySelector('.urgent-dismiss-btn');
-            if (existingBtn) existingBtn.remove();
+            // Clear any existing buttons
+            const existingActions = popup.querySelector('.notif-actions');
+            if (existingActions) existingActions.remove();
+
+            // Create action buttons container
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'notif-actions';
 
             // Handle URGENT alerts differently
             if (alert.type === 'urgent') {
                 popup.classList.add('urgent');
                 currentUrgentAlert = alert; // Mark as urgent
                 
-                // Add dismiss button
+                // Create "I'm Coming" button for urgent
+                const comingBtn = document.createElement('button');
+                comingBtn.className = 'notif-btn notif-btn-coming';
+                comingBtn.innerHTML = '🏃 I\'m Coming!';
+                comingBtn.onclick = () => sendComingResponse(alert, comingBtn);
+                
+                // Create dismiss button for urgent
                 const dismissBtn = document.createElement('button');
-                dismissBtn.className = 'urgent-dismiss-btn';
-                dismissBtn.innerHTML = '🚨 Dismiss Urgent Alert';
+                dismissBtn.className = 'notif-btn notif-btn-dismiss';
+                dismissBtn.innerHTML = '🚨 Dismiss';
                 dismissBtn.onclick = dismissUrgentNotification;
-                popup.appendChild(dismissBtn);
+                
+                actionsDiv.appendChild(comingBtn);
+                actionsDiv.appendChild(dismissBtn);
+                popup.appendChild(actionsDiv);
                 
                 // Play continuous urgent sound
                 playUrgentSound();
@@ -3956,6 +4025,16 @@
                 popup.classList.remove('urgent');
                 currentUrgentAlert = null;
                 stopUrgentSound();
+                
+                // Create "I'm Coming" button for normal alerts
+                const comingBtn = document.createElement('button');
+                comingBtn.className = 'notif-btn notif-btn-coming';
+                comingBtn.innerHTML = '🏃 I\'m Coming!';
+                comingBtn.style.width = '100%';
+                comingBtn.onclick = () => sendComingResponse(alert, comingBtn);
+                
+                actionsDiv.appendChild(comingBtn);
+                popup.appendChild(actionsDiv);
                 
                 // Play single notification sound for non-urgent
                 playNotificationSound();
@@ -3974,6 +4053,55 @@
                 }, 5000);
             }
             // Urgent notifications NEVER auto-dismiss - only via button click
+        }
+
+        // Send "I'm Coming" response to patient via Firebase
+        async function sendComingResponse(alert, buttonElement) {
+            console.log('📤 Sending "I\'m Coming" response for alert:', alert.id);
+            
+            try {
+                // Disable button immediately to prevent double-clicks
+                buttonElement.disabled = true;
+                buttonElement.innerHTML = '⏳ Sending...';
+                
+                // Prepare caregiver response data
+                const responseData = {
+                    message: "I'm coming!",
+                    timestamp: Date.now(),
+                    acknowledged: true,
+                    caregiverAction: 'coming'
+                };
+                
+                // Write response to Firebase under the specific alert
+                const alertRef = window.firebase.database().ref(`alerts/patient-1762505870313/${alert.id}/caregiverResponse`);
+                await alertRef.set(responseData);
+                
+                console.log('✅ "I\'m Coming" response sent successfully to Firebase');
+                
+                // Update button to "sent" state
+                buttonElement.classList.add('sent');
+                buttonElement.innerHTML = '✓ Sent';
+                
+                // Update notification in local array
+                const notif = notifications.find(n => n.id === alert.id);
+                if (notif) {
+                    notif.comingSent = true;
+                }
+                
+                // Play success sound (quick beep)
+                playNotificationSound();
+                
+            } catch (error) {
+                console.error('❌ Error sending "I\'m Coming" response:', error);
+                
+                // Revert button on error
+                buttonElement.disabled = false;
+                buttonElement.classList.remove('sent');
+                buttonElement.innerHTML = '🏃 I\'m Coming!';
+                
+                // Show error to user
+                alert('Failed to send response. Please try again.');
+            }
         }
 
         // Dismiss urgent notification
