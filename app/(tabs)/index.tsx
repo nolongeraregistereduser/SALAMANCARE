@@ -120,17 +120,16 @@ export default function PatientDashboard() {
 
   const loadPatientInfo = async () => {
     try {
+      // HARDCODED PATIENT ID - MUST MATCH CAREGIVER DASHBOARD
+      const PATIENT_ID = 'patient-1762505870313';
+      
       const savedId = await AsyncStorage.getItem('patientId');
       const savedName = await AsyncStorage.getItem('patientName');
       
-      if (savedId) {
-        setPatientId(savedId);
-      } else {
-        // First time setup - generate ID
-        const newId = `patient-${Date.now()}`;
-        await AsyncStorage.setItem('patientId', newId);
-        setPatientId(newId);
-      }
+      // Always use the hardcoded patient ID for testing/demo
+      // In production, this would be assigned during patient registration
+      setPatientId(PATIENT_ID);
+      await AsyncStorage.setItem('patientId', PATIENT_ID);
       
       if (savedName) {
         setPatientName(savedName);
