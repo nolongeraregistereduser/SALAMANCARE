@@ -490,15 +490,16 @@
             transform: translateX(-50%) translateY(-100px);
             width: 90%;
             max-width: 340px;
-            background: #FDFFFF;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            padding: 14px 16px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 16px;
             z-index: 99999;
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             pointer-events: none;
-            border-left: 4px solid #1977F2;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(10px);
         }
 
         .push-notification.show {
@@ -508,25 +509,21 @@
         }
 
         .push-notification.urgent {
-            background: #FEF2F2;
-            border-left-color: #EF4444;
-            animation: gentlePulse 0.6s ease-out;
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            border: 2px solid #EF4444;
+            animation: urgentPulse 1.5s infinite;
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3), 0 4px 12px rgba(239, 68, 68, 0.2);
         }
 
-        @keyframes gentlePulse {
-            0% {
-                transform: translateX(-50%) translateY(0) scale(0.95);
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        @keyframes urgentPulse {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0) scale(1);
+                box-shadow: 0 10px 40px rgba(239, 68, 68, 0.3), 0 4px 12px rgba(239, 68, 68, 0.2);
             }
 
             50% {
-                transform: translateX(-50%) translateY(0) scale(1.02);
-                box-shadow: 0 12px 32px rgba(239, 68, 68, 0.2);
-            }
-
-            100% {
-                transform: translateX(-50%) translateY(0) scale(1);
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+                transform: translateX(-50%) translateY(0) scale(1.03);
+                box-shadow: 0 15px 50px rgba(239, 68, 68, 0.4), 0 6px 16px rgba(239, 68, 68, 0.3);
             }
         }
 
@@ -534,22 +531,32 @@
             display: flex;
             align-items: flex-start;
             gap: 12px;
+            margin-bottom: 12px;
         }
 
         .push-notif-icon {
-            width: 44px;
-            height: 44px;
-            background: #EFF6FF;
-            border-radius: 10px;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 24px;
             flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(25, 119, 242, 0.15);
         }
 
         .push-notification.urgent .push-notif-icon {
-            background: #FEE2E2;
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
+            animation: iconShake 0.5s infinite;
+        }
+
+        @keyframes iconShake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
         }
 
         .push-notif-content {
@@ -558,26 +565,30 @@
         }
 
         .push-notif-title {
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 700;
             color: #1F2937;
             margin-bottom: 4px;
             line-height: 1.3;
+            font-family: 'Poppins', sans-serif;
         }
 
         .push-notification.urgent .push-notif-title {
             color: #DC2626;
+            font-size: 16px;
         }
 
         .push-notif-message {
             font-size: 13px;
-            color: #6B7280;
-            line-height: 1.4;
-            margin-bottom: 6px;
+            color: #4B5563;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            font-family: 'Poppins', sans-serif;
         }
 
         .push-notification.urgent .push-notif-message {
-            color: #991B1B;
+            color: #7F1D1D;
+            font-weight: 500;
         }
 
         .push-notif-time {
@@ -587,6 +598,7 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            font-family: 'Poppins', sans-serif;
         }
 
         .push-notif-time::before {
@@ -598,6 +610,37 @@
             color: #DC2626;
         }
 
+        /* Urgent Dismiss Button */
+        .urgent-dismiss-btn {
+            width: 100%;
+            margin-top: 12px;
+            padding: 10px;
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .urgent-dismiss-btn:hover {
+            background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .urgent-dismiss-btn:active {
+            transform: translateY(0);
+        }
+
         /* Notification Panel */
         .notification-panel {
             position: absolute;
@@ -607,7 +650,7 @@
             height: 100%;
             background: #F4F7FB;
             z-index: 100000;
-            transition: right 0.3s ease;
+            transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
             display: none;
         }
@@ -624,13 +667,15 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .notification-panel-title {
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 700;
             color: #1F2937;
             margin-bottom: 8px;
+            font-family: 'Poppins', sans-serif;
         }
 
         .notification-panel-actions {
@@ -639,63 +684,72 @@
         }
 
         .notif-action-btn {
-            padding: 6px 12px;
-            border-radius: 8px;
+            padding: 8px 14px;
+            border-radius: 10px;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
             border: none;
+            font-family: 'Poppins', sans-serif;
         }
 
         .notif-mark-read {
-            background: #1977F2;
+            background: linear-gradient(135deg, #1977F2 0%, #1565C0 100%);
             color: white;
+            box-shadow: 0 2px 8px rgba(25, 119, 242, 0.25);
         }
 
         .notif-mark-read:hover {
-            background: #1565C0;
+            background: linear-gradient(135deg, #1565C0 0%, #0D47A1 100%);
+            box-shadow: 0 4px 12px rgba(25, 119, 242, 0.35);
+            transform: translateY(-1px);
         }
 
         .notif-close {
-            background: #E5E7EB;
+            background: #F3F4F6;
             color: #6B7280;
+            border: 1px solid #E5E7EB;
         }
 
         .notif-close:hover {
-            background: #D1D5DB;
+            background: #E5E7EB;
+            border-color: #D1D5DB;
         }
 
         .notification-list {
-            padding: 16px;
+            padding: 12px;
         }
 
         .notification-item {
-            background: #FDFFFF;
-            border-radius: 10px;
+            background: white;
+            border-radius: 12px;
             padding: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border-left: 4px solid #1977F2;
             cursor: pointer;
             transition: all 0.2s;
             display: flex;
             gap: 12px;
             align-items: flex-start;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .notification-item:hover {
             transform: translateX(-3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
         }
 
         .notification-item.unread {
-            background: #EFF6FF;
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
             border-left-color: #1977F2;
+            box-shadow: 0 2px 8px rgba(25, 119, 242, 0.1);
         }
 
         .notification-item.urgent {
             border-left-color: #EF4444;
-            background: #FEF2F2;
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
         }
 
         .notification-item.read {
@@ -705,13 +759,13 @@
         }
 
         .notification-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
             flex-shrink: 0;
         }
 
@@ -728,21 +782,24 @@
         }
 
         .notification-title {
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             color: #1F2937;
+            font-family: 'Poppins', sans-serif;
         }
 
         .notification-time {
-            font-size: 10px;
+            font-size: 11px;
             color: #9CA3AF;
+            font-family: 'Poppins', sans-serif;
             white-space: nowrap;
         }
 
         .notification-message {
-            font-size: 12px;
-            color: #6B7280;
-            line-height: 1.4;
+            font-size: 13px;
+            color: #4B5563;
+            line-height: 1.5;
+            font-family: 'Poppins', sans-serif;
         }
 
         .empty-state {
@@ -3855,6 +3912,10 @@
             }
         }
 
+        // Urgent notification sound interval
+        let urgentSoundInterval = null;
+        let urgentAudioContext = null;
+
         // Show push notification popup
         function showPushNotification(alert) {
             const popup = document.getElementById('pushNotification');
@@ -3870,24 +3931,103 @@
             message.textContent = alert.message || `Patient needs ${alert.type} assistance`;
             time.textContent = 'Just now';
 
-            // Add urgent class if needed
+            // Clear any existing dismiss button
+            const existingBtn = popup.querySelector('.urgent-dismiss-btn');
+            if (existingBtn) existingBtn.remove();
+
+            // Add urgent class and dismiss button if needed
             if (alert.type === 'urgent') {
                 popup.classList.add('urgent');
+                
+                // Add dismiss button
+                const dismissBtn = document.createElement('button');
+                dismissBtn.className = 'urgent-dismiss-btn';
+                dismissBtn.innerHTML = '🚨 Dismiss Urgent Alert';
+                dismissBtn.onclick = dismissUrgentNotification;
+                popup.appendChild(dismissBtn);
+                
+                // Play continuous urgent sound
+                playUrgentSound();
             } else {
                 popup.classList.remove('urgent');
+                stopUrgentSound();
             }
 
             // Show popup with slide down animation
             popup.classList.add('show');
 
-            // Play notification sound
-            playNotificationSound();
+            // Play notification sound for non-urgent
+            if (alert.type !== 'urgent') {
+                playNotificationSound();
+                
+                // Auto-dismiss after 5 seconds for non-urgent
+                setTimeout(() => {
+                    popup.classList.remove('show');
+                }, 5000);
+            }
+            // Urgent notifications never auto-dismiss
+        }
 
-            // Auto-dismiss after 5-6 seconds (6 for urgent)
-            const dismissTime = alert.type === 'urgent' ? 6000 : 5000;
-            setTimeout(() => {
-                popup.classList.remove('show');
-            }, dismissTime);
+        // Dismiss urgent notification
+        function dismissUrgentNotification() {
+            const popup = document.getElementById('pushNotification');
+            popup.classList.remove('show', 'urgent');
+            stopUrgentSound();
+            
+            // Remove dismiss button
+            const btn = popup.querySelector('.urgent-dismiss-btn');
+            if (btn) btn.remove();
+        }
+
+        // Play urgent continuous sound
+        function playUrgentSound() {
+            // Stop any existing urgent sound
+            stopUrgentSound();
+            
+            // Create urgent siren sound pattern
+            const playUrgentTone = () => {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+
+                    // Urgent siren effect (alternating frequencies)
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.linearRampToValueAtTime(1200, audioContext.currentTime + 0.2);
+                    oscillator.frequency.linearRampToValueAtTime(800, audioContext.currentTime + 0.4);
+                    
+                    oscillator.type = 'sine';
+
+                    gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.5);
+                } catch (error) {
+                    console.log('Urgent sound not available');
+                }
+            };
+            
+            // Play immediately
+            playUrgentTone();
+            
+            // Repeat every 1.5 seconds
+            urgentSoundInterval = setInterval(playUrgentTone, 1500);
+        }
+
+        // Stop urgent sound
+        function stopUrgentSound() {
+            if (urgentSoundInterval) {
+                clearInterval(urgentSoundInterval);
+                urgentSoundInterval = null;
+            }
+            if (urgentAudioContext) {
+                urgentAudioContext.close();
+                urgentAudioContext = null;
+            }
         }
 
         // Add new notification
