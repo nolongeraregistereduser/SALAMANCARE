@@ -636,6 +636,9 @@
             border-left: 4px solid #3B82F6;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
         }
 
         .notification-item:hover {
@@ -658,53 +661,63 @@
             border-left-color: #D1D5DB;
         }
 
-        .notif-item-header {
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
         }
 
-        .notif-item-icon {
-            font-size: 24px;
+        .notification-content {
+            flex: 1;
+            min-width: 0;
         }
 
-        .notif-item-type {
-            font-size: 13px;
-            font-weight: bold;
-            color: #1F2937;
-            text-transform: capitalize;
-        }
-
-        .notif-item-time {
-            margin-left: auto;
-            font-size: 10px;
-            color: #9CA3AF;
-        }
-
-        .notif-item-message {
-            font-size: 12px;
-            color: #6B7280;
-            line-height: 1.4;
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 4px;
         }
 
-        .notif-item-patient {
-            font-size: 11px;
-            color: #9CA3AF;
+        .notification-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1F2937;
         }
 
-        .no-notifications {
+        .notification-time {
+            font-size: 10px;
+            color: #9CA3AF;
+            white-space: nowrap;
+        }
+
+        .notification-message {
+            font-size: 12px;
+            color: #6B7280;
+            line-height: 1.4;
+        }
+
+        .empty-state {
             text-align: center;
             padding: 60px 20px;
             color: #9CA3AF;
         }
 
-        .no-notifications svg {
+        .empty-state-icon {
             width: 64px;
             height: 64px;
             margin: 0 auto 16px;
             opacity: 0.3;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            color: #9CA3AF;
         }
 
         /* ========== END NOTIFICATION SYSTEM STYLES ========== */
@@ -3662,8 +3675,15 @@
         // Make addNotification globally available for Firebase integration
         window.addNotification = addNotification;
 
-        // Initialize notification system
-        console.log('Notification system initialized for Patient 1762505870313');
+        // Initialize notification system on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Reset notifications and badge on page load
+            notifications = [];
+            unreadCount = 0;
+            updateNotificationBadge();
+            
+            console.log('Notification system initialized for Patient 1762505870313');
+        });
     </script>
 
     <!-- Firebase Notification Integration -->
