@@ -22,6 +22,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
+// Expose database and ref to global scope for caregiver response function
+window.firebaseDatabase = database;
+window.firebaseRef = ref;
+
 // Track which alerts we've already shown
 let shownAlerts = new Set();
 

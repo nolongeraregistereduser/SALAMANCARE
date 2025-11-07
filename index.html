@@ -4092,8 +4092,11 @@
                 };
                 
                 // Write response to Firebase under the specific alert
-                const alertRef = window.firebase.database().ref(`alerts/patient-1762505870313/${alert.id}/caregiverResponse`);
-                await alertRef.set(responseData);
+                const alertRef = window.firebaseRef(window.firebaseDatabase, `alerts/patient-1762505870313/${alert.id}/caregiverResponse`);
+                
+                // Import set function dynamically
+                const { set } = await import('https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js');
+                await set(alertRef, responseData);
                 
                 console.log('✅ "I\'m Coming" response sent successfully to Firebase');
                 
