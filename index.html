@@ -3915,6 +3915,7 @@
         // Urgent notification sound interval
         let urgentSoundInterval = null;
         let urgentAudioContext = null;
+        let currentUrgentAlert = null; // Track if urgent alert is showing
 
         // Show push notification popup
         function showPushNotification(alert) {
@@ -3935,9 +3936,10 @@
             const existingBtn = popup.querySelector('.urgent-dismiss-btn');
             if (existingBtn) existingBtn.remove();
 
-            // Add urgent class and dismiss button if needed
+            // Handle URGENT alerts differently
             if (alert.type === 'urgent') {
                 popup.classList.add('urgent');
+                currentUrgentAlert = alert; // Mark as urgent
                 
                 // Add dismiss button
                 const dismissBtn = document.createElement('button');
@@ -3948,35 +3950,50 @@
                 
                 // Play continuous urgent sound
                 playUrgentSound();
+                
+                console.log('🚨 URGENT alert displayed - will NOT auto-dismiss');
             } else {
                 popup.classList.remove('urgent');
+                currentUrgentAlert = null;
                 stopUrgentSound();
+                
+                // Play single notification sound for non-urgent
+                playNotificationSound();
             }
 
             // Show popup with slide down animation
             popup.classList.add('show');
 
-            // Play notification sound for non-urgent
+            // ONLY auto-dismiss if NOT urgent
             if (alert.type !== 'urgent') {
-                playNotificationSound();
-                
-                // Auto-dismiss after 5 seconds for non-urgent
                 setTimeout(() => {
-                    popup.classList.remove('show');
+                    // Double-check it's still not urgent before dismissing
+                    if (currentUrgentAlert === null) {
+                        popup.classList.remove('show');
+                    }
                 }, 5000);
             }
-            // Urgent notifications never auto-dismiss
+            // Urgent notifications NEVER auto-dismiss - only via button click
         }
 
         // Dismiss urgent notification
         function dismissUrgentNotification() {
             const popup = document.getElementById('pushNotification');
-            popup.classList.remove('show', 'urgent');
+            
+            // Stop the urgent sound FIRST
             stopUrgentSound();
+            
+            // Clear urgent flag
+            currentUrgentAlert = null;
+            
+            // Remove urgent class and hide popup
+            popup.classList.remove('show', 'urgent');
             
             // Remove dismiss button
             const btn = popup.querySelector('.urgent-dismiss-btn');
             if (btn) btn.remove();
+            
+            console.log('✅ Urgent notification dismissed - sound stopped, popup hidden');
         }
 
         // Play urgent continuous sound
