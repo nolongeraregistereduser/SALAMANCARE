@@ -196,35 +196,17 @@ export default function PatientDashboard() {
 
   return (
     <ThemedView style={styles.container}>
-      {/* Header */}
-      <ThemedView style={styles.header}>
-        <ThemedText type="title" style={styles.headerTitle}>
-          Salamanka 🛎️
-        </ThemedText>
-        <ThemedText style={styles.headerSubtitle}>
-          Press a button to call your caregiver
-        </ThemedText>
-        <ThemedText style={styles.headerSubtitleAr}>
-          اضغط على زر للاتصال بمقدم الرعاية
-        </ThemedText>
-        {patientId && (
-          <ThemedText style={styles.patientIdText}>
-            Patient ID: {patientId}
+      {/* Caregiver Response Indicator - Only show when responded */}
+      {caregiverResponded && (
+        <View style={styles.responseIndicator}>
+          <ThemedText style={styles.responseText}>
+            ✅ Your caregiver is coming to help you!
           </ThemedText>
-        )}
-        
-        {/* Caregiver Response Indicator */}
-        {caregiverResponded && (
-          <View style={styles.responseIndicator}>
-            <ThemedText style={styles.responseText}>
-              ✅ Your caregiver is coming to help you!
-            </ThemedText>
-            <ThemedText style={styles.responseTextAr}>
-              مقدم الرعاية قادم لمساعدتك
-            </ThemedText>
-          </View>
-        )}
-      </ThemedView>
+          <ThemedText style={styles.responseTextAr}>
+            مقدم الرعاية قادم لمساعدتك
+          </ThemedText>
+        </View>
+      )}
 
       {/* Alert Buttons Grid - 2 per row */}
       <View style={styles.gridContainer}>
@@ -248,50 +230,47 @@ export default function PatientDashboard() {
               onPress={() => handleButtonPress(button)}
               disabled={sending !== null}>
               <View style={styles.buttonContent}>
-                {/* Emoji/Icon */}
-                <ThemedText style={styles.buttonEmoji}>{button.emoji}</ThemedText>
+                {/* Emoji/Icon at the top */}
+                <View style={styles.iconContainer}>
+                  <ThemedText style={styles.buttonEmoji}>{button.emoji}</ThemedText>
+                </View>
 
-                {/* Labels */}
-                <ThemedText
-                  style={[
-                    styles.buttonLabel,
-                    button.urgent && styles.urgentLabel,
-                  ]}
-                  lightColor="#FFFFFF"
-                  darkColor="#FFFFFF">
-                  {button.label}
-                </ThemedText>
-                <ThemedText
-                  style={styles.buttonLabelAr}
-                  lightColor="#FFFFFF"
-                  darkColor="#FFFFFF">
-                  {button.labelAr}
-                </ThemedText>
+                {/* Spacer to push text to bottom */}
+                <View style={{ flex: 1 }} />
 
-                {/* Sending indicator */}
-                {isActive && (
+                {/* Labels at the bottom */}
+                <View style={styles.textContainer}>
                   <ThemedText
-                    style={styles.sendingText}
+                    style={[
+                      styles.buttonLabel,
+                      button.urgent && styles.urgentLabel,
+                    ]}
                     lightColor="#FFFFFF"
                     darkColor="#FFFFFF">
-                    Sending...
+                    {button.label}
                   </ThemedText>
-                )}
+                  <ThemedText
+                    style={styles.buttonLabelAr}
+                    lightColor="#FFFFFF"
+                    darkColor="#FFFFFF">
+                    {button.labelAr}
+                  </ThemedText>
+
+                  {/* Sending indicator */}
+                  {isActive && (
+                    <ThemedText
+                      style={styles.sendingText}
+                      lightColor="#FFFFFF"
+                      darkColor="#FFFFFF">
+                      Sending...
+                    </ThemedText>
+                  )}
+                </View>
               </View>
             </Pressable>
           );
         })}
       </View>
-
-      {/* Info Footer */}
-      <ThemedView style={styles.footer}>
-        <ThemedText style={styles.footerText}>
-          🔔 Your caregiver will be notified instantly
-        </ThemedText>
-        <ThemedText style={styles.footerText}>
-          💚 You are connected and safe
-        </ThemedText>
-      </ThemedView>
     </ThemedView>
   );
 }
@@ -300,41 +279,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    paddingTop: 20,
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  headerTitle: {
-    fontSize: 36,
-    marginBottom: 8,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    opacity: 0.7,
-    textAlign: 'center',
-  },
-  headerSubtitleAr: {
-    fontSize: 16,
-    opacity: 0.7,
-    textAlign: 'center',
-    marginTop: 4,
-    fontWeight: '600',
-  },
-  patientIdText: {
-    fontSize: 12,
-    opacity: 0.5,
-    textAlign: 'center',
-    marginTop: 8,
-    fontFamily: 'monospace',
+    paddingTop: 40,
+    justifyContent: 'center',
   },
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     gap: 16,
-    flex: 1,
   },
   alertButton: {
     width: (width - 48) / 2, // 2 buttons per row with gap
@@ -356,27 +308,38 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   buttonContent: {
+    flex: 1,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+  },
+  iconContainer: {
+    marginTop: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 12,
+  },
+  textContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
   },
   buttonEmoji: {
-    fontSize: 72,
-    marginBottom: 12,
+    fontSize: 64,
   },
   buttonLabel: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   buttonLabelAr: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
     marginTop: 4,
     fontWeight: '600',
   },
   urgentLabel: {
-    fontSize: 22,
+    fontSize: 24,
     letterSpacing: 2,
   },
   sendingText: {
@@ -384,20 +347,8 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontStyle: 'italic',
   },
-  footer: {
-    marginTop: 'auto',
-    paddingTop: 20,
-    paddingBottom: 10,
-    alignItems: 'center',
-    gap: 8,
-  },
-  footerText: {
-    fontSize: 14,
-    opacity: 0.6,
-    textAlign: 'center',
-  },
   responseIndicator: {
-    marginTop: 16,
+    marginBottom: 20,
     padding: 16,
     backgroundColor: '#10B981',
     borderRadius: 16,
