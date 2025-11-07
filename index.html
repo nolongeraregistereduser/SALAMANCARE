@@ -418,6 +418,296 @@
             height: 16px;
             color: #6B7280;
         }
+
+        /* ========== NOTIFICATION SYSTEM STYLES ========== */
+        
+        /* Notification Bell Button */
+        .notification-bell-button {
+            width: 28px;
+            height: 28px;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .notification-bell-button:hover {
+            opacity: 0.6;
+        }
+
+        .notification-bell-button svg {
+            width: 22px;
+            height: 22px;
+            color: #9CA3AF;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #EF4444;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+
+        .notification-badge.show {
+            display: flex;
+            animation: badgePop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes badgePop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Push Notification Popup */
+        .push-notification {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            width: 90%;
+            max-width: 340px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            z-index: 99999;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+        }
+
+        .push-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .push-notification.urgent {
+            background: linear-gradient(135deg, #FF6B6B 0%, #EE5A6F 100%);
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+            25% { transform: translateX(-50%) translateY(0) rotate(-2deg); }
+            75% { transform: translateX(-50%) translateY(0) rotate(2deg); }
+        }
+
+        .push-notif-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .push-notif-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .push-notif-content {
+            flex: 1;
+        }
+
+        .push-notif-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1F2937;
+            margin-bottom: 4px;
+        }
+
+        .push-notification.urgent .push-notif-title {
+            color: white;
+        }
+
+        .push-notif-message {
+            font-size: 13px;
+            color: #6B7280;
+            line-height: 1.4;
+        }
+
+        .push-notification.urgent .push-notif-message {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .push-notif-time {
+            font-size: 11px;
+            color: #9CA3AF;
+            margin-top: 4px;
+        }
+
+        .push-notification.urgent .push-notif-time {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Notification Panel */
+        .notification-panel {
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: #F4F7FB;
+            z-index: 100000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .notification-panel.open {
+            right: 0;
+            display: block;
+        }
+
+        .notification-panel-header {
+            background: white;
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .notification-panel-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1F2937;
+            margin-bottom: 8px;
+        }
+
+        .notification-panel-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .notif-action-btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .notif-mark-read {
+            background: #1977F2;
+            color: white;
+        }
+
+        .notif-mark-read:hover {
+            background: #1565C0;
+        }
+
+        .notif-close {
+            background: #E5E7EB;
+            color: #6B7280;
+        }
+
+        .notif-close:hover {
+            background: #D1D5DB;
+        }
+
+        .notification-list {
+            padding: 16px;
+        }
+
+        .notification-item {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 4px solid #3B82F6;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .notification-item:hover {
+            transform: translateX(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .notification-item.unread {
+            background: #EFF6FF;
+            border-left-color: #1977F2;
+        }
+
+        .notification-item.urgent {
+            border-left-color: #EF4444;
+            background: #FEF2F2;
+        }
+
+        .notification-item.read {
+            opacity: 0.7;
+            border-left-color: #D1D5DB;
+        }
+
+        .notif-item-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .notif-item-icon {
+            font-size: 24px;
+        }
+
+        .notif-item-type {
+            font-size: 13px;
+            font-weight: bold;
+            color: #1F2937;
+            text-transform: capitalize;
+        }
+
+        .notif-item-time {
+            margin-left: auto;
+            font-size: 10px;
+            color: #9CA3AF;
+        }
+
+        .notif-item-message {
+            font-size: 12px;
+            color: #6B7280;
+            line-height: 1.4;
+            margin-bottom: 4px;
+        }
+
+        .notif-item-patient {
+            font-size: 11px;
+            color: #9CA3AF;
+        }
+
+        .no-notifications {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9CA3AF;
+        }
+
+        .no-notifications svg {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            opacity: 0.3;
+        }
+
+        /* ========== END NOTIFICATION SYSTEM STYLES ========== */
     </style>
 </head>
 
@@ -454,13 +744,24 @@
                 <div class="page active" id="page-patients">
                     <div class="flex justify-between items-center mb-4">
                         <h1 class="text-zinc-800 text-xl font-semibold">Patient Management</h1>
-                        <div class="settings-button" onclick="alert('Settings - Feature coming soon!')">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
+                        <div class="flex items-center gap-2">
+                            <!-- Notification Bell Icon -->
+                            <div class="notification-bell-button" onclick="toggleNotificationPanel()">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                                </svg>
+                                <span class="notification-badge" id="notificationBadge">0</span>
+                            </div>
+                            <!-- Settings Icon -->
+                            <div class="settings-button" onclick="alert('Settings - Feature coming soon!')">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
 
@@ -2434,6 +2735,53 @@
                 </div>
             </div>
 
+            <!-- ========== NOTIFICATION SYSTEM COMPONENTS ========== -->
+            
+            <!-- Push Notification Popup (appears at top for 5-6 seconds) -->
+            <div class="push-notification" id="pushNotification">
+                <div class="push-notif-header">
+                    <div class="push-notif-icon" id="pushNotifIcon">🔔</div>
+                    <div class="push-notif-content">
+                        <div class="push-notif-title" id="pushNotifTitle">Patient Alert</div>
+                        <div class="push-notif-message" id="pushNotifMessage">New request received</div>
+                        <div class="push-notif-time" id="pushNotifTime">Just now</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notification Panel (slides from right) -->
+            <div class="notification-panel" id="notificationPanel">
+                <div class="notification-panel-header">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="notification-panel-title">Notifications</div>
+                        <button class="notif-action-btn notif-close" onclick="toggleNotificationPanel()">
+                            <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="notification-panel-actions">
+                        <button class="notif-action-btn notif-mark-read" onclick="markAllAsRead()">
+                            ✓ Mark All as Read
+                        </button>
+                        <button class="notif-action-btn notif-close" onclick="clearAllNotifications()">
+                            🗑️ Clear All
+                        </button>
+                    </div>
+                </div>
+                <div class="notification-list" id="notificationList">
+                    <div class="no-notifications">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <p>No notifications yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== END NOTIFICATION SYSTEM COMPONENTS ========== -->
+
             <!-- Bottom Navigation -->
             <div class="bottom-nav">
                 <div class="nav-item active" onclick="showPage('patients')">
@@ -3417,7 +3765,196 @@
                 });
             }
         });
+
+        // ==============================================
+        // NOTIFICATION SYSTEM - Patient 1762505870313
+        // ==============================================
+        
+        // Notification data store
+        let notifications = [];
+        let unreadCount = 0;
+
+        // Alert type configurations
+        const alertTypes = {
+            water: { emoji: '💧', color: '#3B82F6', label: 'Water Request' },
+            bathroom: { emoji: '🚽', color: '#8B5CF6', label: 'Bathroom Assistance' },
+            pain: { emoji: '😣', color: '#EF4444', label: 'Pain Alert' },
+            position: { emoji: '🛏️', color: '#F59E0B', label: 'Position Change' },
+            urgent: { emoji: '🚨', color: '#DC2626', label: 'URGENT' }
+        };
+
+        // Toggle notification panel
+        function toggleNotificationPanel() {
+            const panel = document.getElementById('notificationPanel');
+            const isOpen = panel.classList.contains('open');
+            
+            if (isOpen) {
+                panel.classList.remove('open');
+            } else {
+                panel.classList.add('open');
+                renderNotificationList();
+            }
+        }
+
+        // Show push notification popup
+        function showPushNotification(alert) {
+            const popup = document.getElementById('pushNotification');
+            const icon = document.getElementById('pushNotifIcon');
+            const title = document.getElementById('pushNotifTitle');
+            const message = document.getElementById('pushNotifMessage');
+            const time = document.getElementById('pushNotifTime');
+
+            const alertConfig = alertTypes[alert.type] || alertTypes.urgent;
+            
+            icon.textContent = alertConfig.emoji;
+            title.textContent = alertConfig.label;
+            message.textContent = alert.message || `Patient needs ${alert.type} assistance`;
+            time.textContent = 'Just now';
+
+            // Show popup with slide down animation
+            popup.classList.add('show');
+            
+            // Play notification sound
+            playNotificationSound();
+
+            // Auto-dismiss after 5-6 seconds (6 for urgent)
+            const dismissTime = alert.type === 'urgent' ? 6000 : 5000;
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, dismissTime);
+        }
+
+        // Add new notification
+        function addNotification(alert) {
+            const notification = {
+                id: Date.now(),
+                type: alert.type,
+                message: alert.message || `Patient needs ${alert.type} assistance`,
+                timestamp: new Date().toISOString(),
+                read: false,
+                urgent: alert.type === 'urgent'
+            };
+
+            notifications.unshift(notification);
+            unreadCount++;
+            updateNotificationBadge();
+            showPushNotification(alert);
+        }
+
+        // Update notification badge
+        function updateNotificationBadge() {
+            const badge = document.getElementById('notificationBadge');
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // Render notification list
+        function renderNotificationList() {
+            const list = document.getElementById('notificationList');
+            
+            if (notifications.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <svg class="empty-state-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <p class="empty-state-text">No notifications yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = notifications.map(notif => {
+                const config = alertTypes[notif.type] || alertTypes.urgent;
+                return `
+                    <div class="notification-item ${!notif.read ? 'unread' : ''}" data-id="${notif.id}">
+                        <div class="notification-icon" style="background: ${config.color}20; color: ${config.color};">
+                            ${config.emoji}
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-header">
+                                <span class="notification-title">${config.label}</span>
+                                <span class="notification-time">${getTimeAgo(notif.timestamp)}</span>
+                            </div>
+                            <p class="notification-message">${notif.message}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Mark all as read
+        function markAllAsRead() {
+            notifications.forEach(notif => notif.read = true);
+            unreadCount = 0;
+            updateNotificationBadge();
+            renderNotificationList();
+        }
+
+        // Clear all notifications
+        function clearAllNotifications() {
+            if (notifications.length === 0) return;
+            
+            if (confirm('Are you sure you want to clear all notifications?')) {
+                notifications = [];
+                unreadCount = 0;
+                updateNotificationBadge();
+                renderNotificationList();
+            }
+        }
+
+        // Get relative time (e.g., "2 minutes ago")
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const time = new Date(timestamp);
+            const diffMs = now - time;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return 'Just now';
+            if (diffMins < 60) return `${diffMins} min ago`;
+            if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+            return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+        }
+
+        // Play notification sound
+        function playNotificationSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            } catch (error) {
+                console.log('Sound notification not available');
+            }
+        }
+
+        // Make addNotification globally available for Firebase integration
+        window.addNotification = addNotification;
+
+        // Initialize notification system
+        console.log('Notification system initialized for Patient 1762505870313');
     </script>
+
+    <!-- Firebase Notification Integration -->
+    <script type="module" src="firebase-notifications.js"></script>
 </body>
 
 </html>
