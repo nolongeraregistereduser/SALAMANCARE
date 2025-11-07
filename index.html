@@ -4015,63 +4015,35 @@
             const actionsDiv = document.createElement('div');
             actionsDiv.className = 'notif-actions';
 
-            // Handle URGENT alerts differently
+            // Add urgent class for styling (red gradient for urgent type only)
             if (alert.type === 'urgent') {
                 popup.classList.add('urgent');
-                currentUrgentAlert = alert; // Mark as urgent
-                
-                // Create "I'm Coming" button for urgent
-                const comingBtn = document.createElement('button');
-                comingBtn.className = 'notif-btn notif-btn-coming';
-                comingBtn.innerHTML = '🏃 I\'m Coming!';
-                comingBtn.onclick = () => sendComingResponse(alert, comingBtn);
-                
-                // Create dismiss button for urgent
-                const dismissBtn = document.createElement('button');
-                dismissBtn.className = 'notif-btn notif-btn-dismiss';
-                dismissBtn.innerHTML = '🚨 Dismiss';
-                dismissBtn.onclick = dismissUrgentNotification;
-                
-                actionsDiv.appendChild(comingBtn);
-                actionsDiv.appendChild(dismissBtn);
-                popup.appendChild(actionsDiv);
-                
-                // Play continuous urgent sound
-                playUrgentSound();
-                
-                console.log('🚨 URGENT alert displayed - will NOT auto-dismiss');
             } else {
                 popup.classList.remove('urgent');
-                currentUrgentAlert = null;
-                stopUrgentSound();
-                
-                // Create "I'm Coming" button for normal alerts
-                const comingBtn = document.createElement('button');
-                comingBtn.className = 'notif-btn notif-btn-coming';
-                comingBtn.innerHTML = '🏃 I\'m Coming!';
-                comingBtn.style.width = '100%';
-                comingBtn.onclick = () => sendComingResponse(alert, comingBtn);
-                
-                actionsDiv.appendChild(comingBtn);
-                popup.appendChild(actionsDiv);
-                
-                // Play single notification sound for non-urgent
-                playNotificationSound();
             }
+            
+            // Mark current alert (prevent auto-dismiss for all notifications)
+            currentUrgentAlert = alert;
+            
+            // Create "I'm Coming" button (full width, no dismiss button)
+            const comingBtn = document.createElement('button');
+            comingBtn.className = 'notif-btn notif-btn-coming';
+            comingBtn.innerHTML = '🏃 I\'m Coming!';
+            comingBtn.style.width = '100%';
+            comingBtn.onclick = () => sendComingResponse(alert, comingBtn);
+            
+            actionsDiv.appendChild(comingBtn);
+            popup.appendChild(actionsDiv);
+            
+            // Play continuous sound for ALL notifications
+            playUrgentSound();
+            
+            console.log(`🔔 ${alert.type.toUpperCase()} alert displayed - will NOT auto-dismiss until action taken`);
 
             // Show popup with slide down animation
             popup.classList.add('show');
 
-            // ONLY auto-dismiss if NOT urgent
-            if (alert.type !== 'urgent') {
-                setTimeout(() => {
-                    // Double-check it's still not urgent before dismissing
-                    if (currentUrgentAlert === null) {
-                        popup.classList.remove('show');
-                    }
-                }, 5000);
-            }
-            // Urgent notifications NEVER auto-dismiss - only via button click
+            // NO auto-dismiss for any notification type
         }
 
         // Send "I'm Coming" response to patient via Firebase
@@ -4110,8 +4082,20 @@
                     notif.comingSent = true;
                 }
                 
+                // Stop the sound and dismiss notification
+                stopUrgentSound();
+                currentUrgentAlert = null;
+                
+                // Hide the popup after sending response
+                setTimeout(() => {
+                    const popup = document.getElementById('pushNotification');
+                    popup.classList.remove('show', 'urgent');
+                }, 1500); // Give user time to see "✓ Sent" message
+                
                 // Play success sound (quick beep)
                 playNotificationSound();
+                
+                console.log('✅ Response sent, notification dismissed, sound stopped');
                 
             } catch (error) {
                 console.error('❌ Error sending "I\'m Coming" response:', error);
