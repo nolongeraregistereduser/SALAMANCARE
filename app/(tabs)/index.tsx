@@ -2,6 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { sendAlert } from '@/services/alertService';
+import { subscribeToCaregiverResponses, type CaregiverResponse } from '@/services/caregiverResponseService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import * as Speech from 'expo-speech';
@@ -77,11 +78,45 @@ export default function PatientDashboard() {
   const [sending, setSending] = useState<AlertType | null>(null);
   const [patientId, setPatientId] = useState<string>('');
   const [patientName, setPatientName] = useState<string>('Patient');
+  const [caregiverResponded, setCaregiverResponded] = useState<boolean>(false);
 
   useEffect(() => {
     // Load patient info from storage
     loadPatientInfo();
   }, []);
+
+  useEffect(() => {
+    // Start listening for caregiver responses when we have a patient ID
+    if (patientId) {
+      console.log('🎧 Setting up caregiver response listener for:', patientId);
+      
+      const unsubscribe = subscribeToCaregiverResponses(
+        patientId,
+        (alertId: string, response: CaregiverResponse) => {
+          console.log('✅ Caregiver responded to alert:', alertId, response);
+          
+          // Show visual feedback
+          setCaregiverResponded(true);
+          
+          // Haptic feedback
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          Vibration.vibrate([0, 200, 100, 200, 100, 200]); // Success pattern
+          
+          // Reset visual feedback after 5 seconds
+          setTimeout(() => {
+            setCaregiverResponded(false);
+          }, 5000);
+        }
+      );
+      
+      // Cleanup listener on unmount
+      return () => {
+        if (unsubscribe) {
+          unsubscribe();
+        }
+      };
+    }
+  }, [patientId]);
 
   const loadPatientInfo = async () => {
     try {
@@ -177,6 +212,18 @@ export default function PatientDashboard() {
           <ThemedText style={styles.patientIdText}>
             Patient ID: {patientId}
           </ThemedText>
+        )}
+        
+        {/* Caregiver Response Indicator */}
+        {caregiverResponded && (
+          <View style={styles.responseIndicator}>
+            <ThemedText style={styles.responseText}>
+              ✅ Your caregiver is coming to help you!
+            </ThemedText>
+            <ThemedText style={styles.responseTextAr}>
+              مقدم الرعاية قادم لمساعدتك
+            </ThemedText>
+          </View>
         )}
       </ThemedView>
 
@@ -349,5 +396,31 @@ const styles = StyleSheet.create({
     fontSize: 14,
     opacity: 0.6,
     textAlign: 'center',
+  },
+  responseIndicator: {
+    marginTop: 16,
+    padding: 16,
+    backgroundColor: '#10B981',
+    borderRadius: 16,
+    width: '100%',
+    alignItems: 'center',
+    shadowColor: '#10B981',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  responseText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  responseTextAr: {
+    fontSize: 14,
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginTop: 4,
+    fontWeight: '600',
   },
 });
