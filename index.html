@@ -420,7 +420,7 @@
         }
 
         /* ========== NOTIFICATION SYSTEM STYLES ========== */
-        
+
         /* Notification Bell Button */
         .notification-bell-button {
             width: 28px;
@@ -469,9 +469,17 @@
         }
 
         @keyframes badgePop {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         /* Push Notification Popup */
@@ -482,14 +490,15 @@
             transform: translateX(-50%) translateY(-100px);
             width: 90%;
             max-width: 340px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            padding: 16px;
+            background: #FDFFFF;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            padding: 14px 16px;
             z-index: 99999;
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             pointer-events: none;
+            border-left: 4px solid #1977F2;
         }
 
         .push-notification.show {
@@ -499,61 +508,94 @@
         }
 
         .push-notification.urgent {
-            background: linear-gradient(135deg, #FF6B6B 0%, #EE5A6F 100%);
-            animation: shake 0.5s;
+            background: #FEF2F2;
+            border-left-color: #EF4444;
+            animation: gentlePulse 0.6s ease-out;
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
-            25% { transform: translateX(-50%) translateY(0) rotate(-2deg); }
-            75% { transform: translateX(-50%) translateY(0) rotate(2deg); }
+        @keyframes gentlePulse {
+            0% {
+                transform: translateX(-50%) translateY(0) scale(0.95);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(0) scale(1.02);
+                box-shadow: 0 12px 32px rgba(239, 68, 68, 0.2);
+            }
+
+            100% {
+                transform: translateX(-50%) translateY(0) scale(1);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            }
         }
 
         .push-notif-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
-            margin-bottom: 8px;
         }
 
         .push-notif-icon {
-            font-size: 32px;
+            width: 44px;
+            height: 44px;
+            background: #EFF6FF;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
             flex-shrink: 0;
+        }
+
+        .push-notification.urgent .push-notif-icon {
+            background: #FEE2E2;
         }
 
         .push-notif-content {
             flex: 1;
+            min-width: 0;
         }
 
         .push-notif-title {
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 600;
             color: #1F2937;
             margin-bottom: 4px;
+            line-height: 1.3;
         }
 
         .push-notification.urgent .push-notif-title {
-            color: white;
+            color: #DC2626;
         }
 
         .push-notif-message {
             font-size: 13px;
             color: #6B7280;
             line-height: 1.4;
+            margin-bottom: 6px;
         }
 
         .push-notification.urgent .push-notif-message {
-            color: rgba(255, 255, 255, 0.95);
+            color: #991B1B;
         }
 
         .push-notif-time {
             font-size: 11px;
             color: #9CA3AF;
-            margin-top: 4px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .push-notif-time::before {
+            content: '•';
+            font-size: 14px;
         }
 
         .push-notification.urgent .push-notif-time {
-            color: rgba(255, 255, 255, 0.8);
+            color: #DC2626;
         }
 
         /* Notification Panel */
@@ -629,17 +671,18 @@
         }
 
         .notification-item {
-            background: white;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 12px;
-            border-left: 4px solid #3B82F6;
+            background: #FDFFFF;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border-left: 4px solid #1977F2;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
         }
 
         .notification-item:hover {
-            transform: translateX(-4px);
+            transform: translateX(-3px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
@@ -654,8 +697,9 @@
         }
 
         .notification-item.read {
-            opacity: 0.7;
+            opacity: 0.65;
             border-left-color: #D1D5DB;
+            background: #F9FAFB;
         }
 
         .notif-item-header {
@@ -666,20 +710,42 @@
         }
 
         .notif-item-icon {
-            font-size: 24px;
+            width: 36px;
+            height: 36px;
+            background: #EFF6FF;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .notification-item.urgent .notif-item-icon {
+            background: #FEE2E2;
+        }
+
+        .notification-item.read .notif-item-icon {
+            background: #F3F4F6;
+            opacity: 0.8;
         }
 
         .notif-item-type {
             font-size: 13px;
-            font-weight: bold;
+            font-weight: 600;
             color: #1F2937;
             text-transform: capitalize;
+        }
+
+        .notification-item.urgent .notif-item-type {
+            color: #DC2626;
         }
 
         .notif-item-time {
             margin-left: auto;
             font-size: 10px;
             color: #9CA3AF;
+            font-weight: 500;
         }
 
         .notif-item-message {
@@ -2736,11 +2802,13 @@
             </div>
 
             <!-- ========== NOTIFICATION SYSTEM COMPONENTS ========== -->
-            
+
             <!-- Push Notification Popup (appears at top for 5-6 seconds) -->
             <div class="push-notification" id="pushNotification">
                 <div class="push-notif-header">
-                    <div class="push-notif-icon" id="pushNotifIcon">🔔</div>
+                    <div class="push-notif-icon" id="pushNotifIconContainer">
+                        <span id="pushNotifIcon">🔔</span>
+                    </div>
                     <div class="push-notif-content">
                         <div class="push-notif-title" id="pushNotifTitle">Patient Alert</div>
                         <div class="push-notif-message" id="pushNotifMessage">New request received</div>
@@ -2756,7 +2824,8 @@
                         <div class="notification-panel-title">Notifications</div>
                         <button class="notif-action-btn notif-close" onclick="toggleNotificationPanel()">
                             <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
@@ -3769,7 +3838,7 @@
         // ==============================================
         // NOTIFICATION SYSTEM - Patient 1762505870313
         // ==============================================
-        
+
         // Notification data store
         let notifications = [];
         let unreadCount = 0;
@@ -3787,7 +3856,7 @@
         function toggleNotificationPanel() {
             const panel = document.getElementById('notificationPanel');
             const isOpen = panel.classList.contains('open');
-            
+
             if (isOpen) {
                 panel.classList.remove('open');
             } else {
@@ -3805,15 +3874,22 @@
             const time = document.getElementById('pushNotifTime');
 
             const alertConfig = alertTypes[alert.type] || alertTypes.urgent;
-            
+
             icon.textContent = alertConfig.emoji;
             title.textContent = alertConfig.label;
             message.textContent = alert.message || `Patient needs ${alert.type} assistance`;
             time.textContent = 'Just now';
 
+            // Add urgent class if needed
+            if (alert.type === 'urgent') {
+                popup.classList.add('urgent');
+            } else {
+                popup.classList.remove('urgent');
+            }
+
             // Show popup with slide down animation
             popup.classList.add('show');
-            
+
             // Play notification sound
             playNotificationSound();
 
@@ -3855,7 +3931,7 @@
         // Render notification list
         function renderNotificationList() {
             const list = document.getElementById('notificationList');
-            
+
             if (notifications.length === 0) {
                 list.innerHTML = `
                     <div class="empty-state">
@@ -3871,18 +3947,20 @@
 
             list.innerHTML = notifications.map(notif => {
                 const config = alertTypes[notif.type] || alertTypes.urgent;
+                const isUrgent = notif.type === 'urgent';
+                const readClass = notif.read ? 'read' : 'unread';
+                const urgentClass = isUrgent ? 'urgent' : '';
+
                 return `
-                    <div class="notification-item ${!notif.read ? 'unread' : ''}" data-id="${notif.id}">
-                        <div class="notification-icon" style="background: ${config.color}20; color: ${config.color};">
-                            ${config.emoji}
-                        </div>
-                        <div class="notification-content">
-                            <div class="notification-header">
-                                <span class="notification-title">${config.label}</span>
-                                <span class="notification-time">${getTimeAgo(notif.timestamp)}</span>
+                    <div class="notification-item ${readClass} ${urgentClass}" data-id="${notif.id}">
+                        <div class="notif-item-header">
+                            <div class="notif-item-icon">
+                                ${config.emoji}
                             </div>
-                            <p class="notification-message">${notif.message}</p>
+                            <div class="notif-item-type">${config.label}</div>
+                            <div class="notif-item-time">${getTimeAgo(notif.timestamp)}</div>
                         </div>
+                        <div class="notif-item-message">${notif.message}</div>
                     </div>
                 `;
             }).join('');
@@ -3899,7 +3977,7 @@
         // Clear all notifications
         function clearAllNotifications() {
             if (notifications.length === 0) return;
-            
+
             if (confirm('Are you sure you want to clear all notifications?')) {
                 notifications = [];
                 unreadCount = 0;
