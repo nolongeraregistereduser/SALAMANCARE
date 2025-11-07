@@ -75,8 +75,8 @@ const ALERT_BUTTONS: AlertButton[] = [
 export default function PatientDashboard() {
   const colorScheme = useColorScheme();
   const [sending, setSending] = useState<AlertType | null>(null);
-  const [patientId, setPatientId] = useState<string>('patient-001'); // TODO: Get from auth
-  const [patientName, setPatientName] = useState<string>('Patient'); // TODO: Get from profile
+  const [patientId, setPatientId] = useState<string>('');
+  const [patientName, setPatientName] = useState<string>('Patient');
 
   useEffect(() => {
     // Load patient info from storage
@@ -88,13 +88,17 @@ export default function PatientDashboard() {
       const savedId = await AsyncStorage.getItem('patientId');
       const savedName = await AsyncStorage.getItem('patientName');
       
-      if (savedId) setPatientId(savedId);
-      if (savedName) setPatientName(savedName);
-      else {
+      if (savedId) {
+        setPatientId(savedId);
+      } else {
         // First time setup - generate ID
         const newId = `patient-${Date.now()}`;
         await AsyncStorage.setItem('patientId', newId);
         setPatientId(newId);
+      }
+      
+      if (savedName) {
+        setPatientName(savedName);
       }
     } catch (error) {
       console.error('Error loading patient info:', error);
@@ -169,6 +173,11 @@ export default function PatientDashboard() {
         <ThemedText style={styles.headerSubtitleAr}>
           اضغط على زر للاتصال بمقدم الرعاية
         </ThemedText>
+        {patientId && (
+          <ThemedText style={styles.patientIdText}>
+            Patient ID: {patientId}
+          </ThemedText>
+        )}
       </ThemedView>
 
       {/* Alert Buttons Grid - 2 per row */}
@@ -266,6 +275,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 4,
     fontWeight: '600',
+  },
+  patientIdText: {
+    fontSize: 12,
+    opacity: 0.5,
+    textAlign: 'center',
+    marginTop: 8,
+    fontFamily: 'monospace',
   },
   gridContainer: {
     flexDirection: 'row',
